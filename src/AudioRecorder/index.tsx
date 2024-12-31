@@ -1,20 +1,52 @@
-import { useRef } from "react"
+import { RecorderControlsProps } from "./types";
 
-export const AudioRecorder = () => {
-    const mediaStream = useRef<MediaStream | null>(null);
 
-    const startRecording = async () => {
-        try {
-            mediaStream.current = await navigator.mediaDevices.getUserMedia({ audio: true });
-            console.log(mediaStream.current)
-        } catch (error) {
-            console.error('Error while trying to access the microphone: ' ,error)
-        }
-    }
+export default function RecorderControls({ recorderState, handlers }: RecorderControlsProps) {
+    const { recordingMinutes, recordingSeconds, initRecording } = recorderState;
+    const { startRecording, saveRecording, cancelRecording } = handlers;
 
     return (
-        <div>
-        <h1>Audio Recorder</h1>
+        <div className="controls-container">
+            <div className="recorder-display">
+                <div className="recording-time">
+                    {initRecording && <div className="recording-indicator"></div>}
+                    <span>{formatMinutes(recordingMinutes)}</span>
+                    <span>:</span>
+                    <span>{formatSeconds(recordingSeconds)}</span>
+                </div>
+                {initRecording && (
+                    <div className="cancel-button-container">
+                        <button className="cancel-button" title="Cancel recording" onClick={cancelRecording}>
+                            Cancel Recording
+                        </button>
+                    </div>
+                )}
+            </div>
+            <div className="start-button-container">
+                {initRecording ? (
+                    <button
+                        className="start-button"
+                        title="Save recording"
+                        disabled={recordingSeconds === 0}
+                        onClick={saveRecording}
+                    >
+                        Save Recording
+                    </button>
+                ) : (
+                    <button className="start-button" title="Start recording" onClick={startRecording}>
+                        Start Recording
+                    </button>
+                )}
+            </div>
         </div>
-    )
+    );
+}
+
+
+export function formatMinutes(minutes: number) {
+    return minutes < 10 ? `0${minutes}` : `${minutes}`;
+}
+
+export function formatSeconds(seconds: number) {
+    return seconds < 10 ? `0${seconds}` : `${seconds}`;
 }

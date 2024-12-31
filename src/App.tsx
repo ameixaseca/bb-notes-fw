@@ -1,11 +1,16 @@
-import { AudioRecorder } from './AudioRecorder'
 import './App.css'
+import RecorderControls from './AudioRecorder'
+import useRecorder from './AudioRecorder/use-recorder'
+import RecordingsList from './Recordings';
 
 function App() {
+  const { recorderState, ...handlers } = useRecorder();
+
 
   return (
     <>
-      <AudioRecorder />
+      <RecorderControls recorderState={recorderState} handlers={handlers} />
+      <RecordingsList audio={recorderState.audio} />
     </>
   )
 }
