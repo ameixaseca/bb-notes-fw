@@ -1,5 +1,5 @@
 import { RecorderControlsProps } from "./types";
-
+import "./index.css"
 
 export default function RecorderControls({ recorderState, handlers }: RecorderControlsProps) {
     const { recordingMinutes, recordingSeconds, initRecording } = recorderState;
@@ -10,9 +10,10 @@ export default function RecorderControls({ recorderState, handlers }: RecorderCo
             <div className="recorder-display">
                 <div className="recording-time">
                     {initRecording && <div className="recording-indicator"></div>}
-                    <span>{formatMinutes(recordingMinutes)}</span>
+                    {/* <span>{formatMinutes(recordingMinutes)}</span> */}
+                    <span>{recordingMinutes.toString().padStart(2, "0")}</span>
                     <span>:</span>
-                    <span>{formatSeconds(recordingSeconds)}</span>
+                    <span>{recordingSeconds.toString().padStart(2, "0")}</span>
                 </div>
                 {initRecording && (
                     <div className="cancel-button-container">
